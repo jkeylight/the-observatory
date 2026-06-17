@@ -1,0 +1,1296 @@
+// THE OBSERVATORY™ — Main Stylesheet
+@import 'variables';
+
+// ─── RESET ───────────────────────────────────────────────
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: auto;
+  background: $bg-primary;
+  color: $text-primary;
+
+  &.lenis {
+    height: auto;
+  }
+}
+
+body {
+  font-family: $font-body;
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+  background: $bg-primary;
+
+  &.loading {
+    overflow: hidden;
+  }
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; color: inherit; font: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+
+// ─── CURSOR ──────────────────────────────────────────────
+.cursor {
+  display: none;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  mix-blend-mode: difference;
+
+  @media (pointer: fine) {
+    display: block;
+  }
+
+  &__inner {
+    width: 6px;
+    height: 6px;
+    background: $moon-white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s $ease-out, height 0.3s $ease-out;
+  }
+
+  &__ring {
+    position: absolute;
+    top: -14px;
+    left: -14px;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba($moon-white, 0.3);
+    border-radius: 50%;
+    transition: width 0.4s $ease-out, height 0.4s $ease-out, top 0.4s $ease-out, left 0.4s $ease-out, border-color 0.3s;
+  }
+
+  &__label {
+    position: absolute;
+    top: 24px;
+    left: 12px;
+    font-family: $font-mono;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: $text-secondary;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &--hovering {
+    .cursor__inner { width: 12px; height: 12px; }
+    .cursor__ring { width: 50px; height: 50px; top: -22px; left: -22px; border-color: $alignment-gold; }
+    .cursor__label { opacity: 1; }
+  }
+}
+
+// ─── CONSTELLATION NAV ───────────────────────────────────
+.constellation-nav {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+  opacity: 0;
+  transition: opacity 0.6s $ease-out;
+
+  &.visible { opacity: 1; }
+
+  @media (max-width: $breakpoint-md) {
+    right: 1rem;
+  }
+
+  &__track {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+
+  &__star {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    cursor: pointer;
+    transition: opacity 0.3s;
+
+    &:hover { opacity: 1 !important; }
+  }
+
+  &__dot {
+    width: 4px;
+    height: 4px;
+    background: rgba($starlight-silver, 0.3);
+    border-radius: 50%;
+    transition: all 0.4s $ease-out;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    font-family: $font-mono;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: rgba($starlight-silver, 0.3);
+    transition: all 0.4s $ease-out;
+    opacity: 0;
+    transform: translateX(4px);
+  }
+
+  &__star:hover,
+  &__star.active {
+    .constellation-nav__dot {
+      background: $moon-white;
+      box-shadow: 0 0 8px rgba($moon-white, 0.4);
+      width: 6px;
+      height: 6px;
+    }
+    .constellation-nav__label {
+      opacity: 1;
+      transform: translateX(0);
+      color: $text-secondary;
+    }
+  }
+
+  &__star.active {
+    .constellation-nav__dot {
+      background: $alignment-gold;
+      box-shadow: 0 0 12px rgba($alignment-gold, 0.5);
+    }
+    .constellation-nav__label { color: $alignment-gold; }
+  }
+
+  &__lines {
+    position: absolute;
+    top: 0;
+    right: 17px;
+    width: 1px;
+    height: 100%;
+    pointer-events: none;
+  }
+}
+
+// ─── SECTION BASE ────────────────────────────────────────
+.section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  &__content {
+    position: relative;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: $space-xl $grid-margin;
+    z-index: 2;
+  }
+
+  &__header {
+    margin-bottom: $space-lg;
+  }
+
+  &__number {
+    font-family: $font-mono;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: $text-muted;
+    display: block;
+    margin-bottom: $space-sm;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: $text-primary;
+  }
+
+  &__opening-text {
+    font-family: $font-body;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 300;
+    color: $text-secondary;
+    line-height: 1.8;
+    margin-bottom: $space-lg;
+    max-width: 600px;
+  }
+
+  &__parallax-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &__gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 3;
+
+    &--bottom {
+      bottom: 0;
+      height: 30vh;
+      background: linear-gradient(to bottom, transparent, $bg-primary);
+    }
+
+    &--top {
+      top: 0;
+      height: 30vh;
+      background: linear-gradient(to top, transparent, $bg-primary);
+    }
+  }
+}
+
+// ─── SECTION 01: ARRIVAL ────────────────────────────────
+.section--arrival {
+  min-height: 150vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 30%, $midnight-blue 0%, $bg-primary 70%);
+
+  .section__content {
+    text-align: center;
+    padding-top: 20vh;
+  }
+
+  &__institution {
+    margin-bottom: $space-md;
+  }
+
+  &__label {
+    font-family: $font-mono;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: $text-muted;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: clamp(3rem, 12vw, 10rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: $space-md;
+    overflow: hidden;
+  }
+
+  &__meta {
+    font-family: $font-mono;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: $text-muted;
+    margin-bottom: $space-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-sm;
+  }
+
+  &__meta-divider {
+    opacity: 0.3;
+  }
+
+  &__subtext {
+    font-family: $font-body;
+    font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+    font-weight: 300;
+    color: $text-secondary;
+    line-height: 1.8;
+    margin-bottom: $space-xl;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: $font-mono;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $text-muted;
+    padding: 1rem 2rem;
+    border: 1px solid rgba($starlight-silver, 0.15);
+    transition: all 0.4s $ease-out;
+
+    &:hover {
+      color: $moon-white;
+      border-color: $alignment-gold;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      animation: ctaFloat 2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes ctaFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+// ─── SECTION 02: MOUNTAIN ───────────────────────────────
+.section--mountain {
+  background: linear-gradient(180deg, $bg-primary 0%, $midnight-blue 50%, $bg-primary 100%);
+
+  .mountain {
+    &__data {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: $space-md;
+      margin-bottom: $space-xl;
+      padding: $space-lg 0;
+      border-top: 1px solid $border;
+      border-bottom: 1px solid $border;
+    }
+
+    &__data-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__data-label {
+      font-family: $font-mono;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $text-muted;
+    }
+
+    &__data-value {
+      font-family: $font-display;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 300;
+      color: $text-primary;
+    }
+
+    &__images {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 300px 300px;
+      gap: $space-sm;
+    }
+
+    &__image {
+      background: $bg-tertiary;
+      border: 1px solid $border;
+      overflow: hidden;
+
+      &--primary {
+        grid-row: 1 / 3;
+      }
+
+      &--secondary,
+      &--tertiary {
+        background: $deep-navy;
+      }
+    }
+  }
+}
+
+// ─── SECTION 03: OBSERVATORY ────────────────────────────
+.section--observatory {
+  background: $bg-primary;
+
+  .observatory {
+    &__charter {
+      display: flex;
+      flex-direction: column;
+      gap: $space-lg;
+      margin-bottom: $space-xl;
+      padding: $space-lg 0;
+      border-top: 1px solid $border;
+    }
+
+    &__charter-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: $space-md;
+
+      @media (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr;
+        gap: $space-xs;
+      }
+    }
+
+    &__charter-label {
+      font-family: $font-mono;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $text-muted;
+    }
+
+    &__charter-text {
+      font-family: $font-body;
+      font-size: 1rem;
+      font-weight: 300;
+      color: $text-secondary;
+      line-height: 1.8;
+    }
+
+    &__gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: $space-sm;
+
+      @media (max-width: $breakpoint-md) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    &__gallery-item {
+      aspect-ratio: 4/3;
+      background: $bg-tertiary;
+      border: 1px solid $border;
+      overflow: hidden;
+      transition: transform 0.6s $ease-out;
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
+}
+
+// ─── SECTION 04: OBSERVATION LOG ────────────────────────
+.section--observation-log {
+  background: linear-gradient(180deg, $bg-primary 0%, $midnight-blue 100%);
+
+  .observation-log {
+    &__timeline {
+      position: relative;
+      padding-left: $space-lg;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(to bottom, transparent, $border, transparent);
+      }
+    }
+
+    &__entry {
+      position: relative;
+      padding: $space-lg 0;
+      padding-left: $space-lg;
+      border-bottom: 1px solid $border;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: -4px;
+        top: $space-lg;
+        width: 9px;
+        height: 9px;
+        background: $bg-primary;
+        border: 1px solid $starlight-silver;
+        border-radius: 50%;
+        transition: all 0.4s $ease-out;
+      }
+
+      &:hover::before {
+        background: $alignment-gold;
+        border-color: $alignment-gold;
+        box-shadow: 0 0 12px rgba($alignment-gold, 0.4);
+      }
+    }
+
+    &__year {
+      font-family: $font-mono;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      color: $text-primary;
+      display: block;
+      margin-bottom: $space-sm;
+      letter-spacing: 0.05em;
+    }
+
+    &__details {
+      max-width: 600px;
+    }
+
+    &__type {
+      font-family: $font-mono;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $alignment-gold;
+      display: block;
+      margin-bottom: $space-xs;
+    }
+
+    &__note {
+      font-family: $font-body;
+      font-size: 1rem;
+      font-weight: 300;
+      color: $text-secondary;
+      line-height: 1.8;
+      margin-bottom: $space-sm;
+    }
+
+    &__coordinates {
+      font-family: $font-mono;
+      font-size: 11px;
+      color: $text-muted;
+      letter-spacing: 0.05em;
+    }
+  }
+}
+
+// ─── SECTION 05: SUBJECT ────────────────────────────────
+.section--subject {
+  background: $bg-primary;
+
+  .subject {
+    &__profile {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: $space-xl;
+      margin-bottom: $space-xl;
+
+      @media (max-width: $breakpoint-lg) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__portrait {
+      aspect-ratio: 3/4;
+      background: $deep-navy;
+      border: 1px solid $border;
+      position: relative;
+      overflow: hidden;
+
+      &-frame {
+        position: absolute;
+        inset: 1px;
+        border: 1px solid rgba($starlight-silver, 0.05);
+      }
+    }
+
+    &__data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: $space-md;
+    }
+
+    &__data-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: $space-sm 0;
+      border-bottom: 1px solid $border;
+    }
+
+    &__data-label {
+      font-family: $font-mono;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $text-muted;
+    }
+
+    &__data-value {
+      font-family: $font-display;
+      font-size: 1.25rem;
+      font-weight: 300;
+      color: $text-primary;
+    }
+
+    &__gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: $space-sm;
+
+      @media (max-width: $breakpoint-md) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    &__gallery-item {
+      aspect-ratio: 4/5;
+      background: $bg-tertiary;
+      border: 1px solid $border;
+      overflow: hidden;
+      transition: transform 0.6s $ease-out;
+
+      &:hover { transform: scale(1.02); }
+    }
+  }
+}
+
+// ─── SECTION 06: STAR ARCHIVE ───────────────────────────
+.section--star-archive {
+  background: linear-gradient(180deg, $bg-primary 0%, $deep-navy 50%, $bg-primary 100%);
+
+  .star-archive {
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(2, 300px);
+      gap: $space-sm;
+
+      @media (max-width: $breakpoint-lg) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media (max-width: $breakpoint-md) {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+      }
+    }
+
+    &__item {
+      background: $bg-tertiary;
+      border: 1px solid $border;
+      overflow: hidden;
+      transition: transform 0.6s $ease-out;
+
+      &:hover { transform: scale(1.02); }
+
+      &--constellation { grid-column: 1 / 3; }
+      &--phenomenon { grid-column: 4 / 6; }
+    }
+  }
+}
+
+// ─── SECTION 07: SIGNALS ────────────────────────────────
+.section--signals {
+  background: $bg-primary;
+
+  .signals {
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: $space-md;
+    }
+
+    &__card {
+      background: rgba($deep-navy, 0.5);
+      border: 1px solid $border;
+      padding: $space-md;
+      transition: border-color 0.4s $ease-out;
+
+      &:hover {
+        border-color: rgba($alignment-gold, 0.3);
+      }
+    }
+
+    &__card-type {
+      font-family: $font-mono;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $alignment-gold;
+      display: block;
+      margin-bottom: $space-md;
+    }
+
+    &__waveform {
+      height: 60px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba($starlight-silver, 0.08) 10%,
+        transparent 20%,
+        rgba($starlight-silver, 0.12) 30%,
+        transparent 40%,
+        rgba($starlight-silver, 0.06) 50%,
+        transparent 60%,
+        rgba($starlight-silver, 0.1) 70%,
+        transparent 80%,
+        rgba($starlight-silver, 0.08) 90%,
+        transparent 100%
+      );
+      margin-bottom: $space-sm;
+      position: relative;
+      overflow: hidden;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 1px;
+        background: rgba($starlight-silver, 0.15);
+      }
+    }
+
+    &__card-meta {
+      font-family: $font-mono;
+      font-size: 10px;
+      color: $text-muted;
+      letter-spacing: 0.05em;
+    }
+  }
+}
+
+// ─── SECTION 08: PATTERNS ───────────────────────────────
+.section--patterns {
+  background: linear-gradient(180deg, $bg-primary 0%, $midnight-blue 100%);
+
+  .patterns {
+    &__board {
+      position: relative;
+      min-height: 500px;
+      padding: $space-lg;
+      border: 1px solid $border;
+      background: rgba($deep-navy, 0.3);
+    }
+
+    &__connection {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba($alignment-gold, 0.3), transparent);
+
+      &--1 { top: 25%; left: 10%; width: 80%; transform: rotate(-5deg); }
+      &--2 { top: 50%; left: 5%; width: 90%; transform: rotate(3deg); }
+      &--3 { top: 75%; left: 15%; width: 70%; transform: rotate(-2deg); }
+    }
+
+    &__note {
+      position: absolute;
+      padding: $space-sm;
+      background: rgba($astronomical-black, 0.8);
+      border: 1px solid $border;
+      max-width: 300px;
+
+      span {
+        font-family: $font-mono;
+        font-size: 10px;
+        color: $text-secondary;
+        line-height: 1.6;
+      }
+
+      &--1 { top: 10%; left: 5%; }
+      &--2 { top: 30%; right: 5%; }
+      &--3 { bottom: 25%; left: 10%; }
+      &--4 { bottom: 5%; right: 10%; }
+    }
+
+    &__evidence {
+      position: absolute;
+      bottom: $space-md;
+      right: $space-md;
+      text-align: right;
+
+      &-label {
+        font-family: $font-mono;
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: $text-muted;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      &-value {
+        font-family: $font-display;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 300;
+        color: $alignment-gold;
+      }
+    }
+  }
+}
+
+// ─── SECTION 09: ALIGNMENTS ─────────────────────────────
+.section--alignments {
+  background: radial-gradient(ellipse at 50% 50%, $midnight-blue 0%, $bg-primary 70%);
+
+  .alignments {
+    &__gallery {
+      display: flex;
+      flex-direction: column;
+      gap: $space-xl;
+    }
+
+    &__event {
+      display: grid;
+      grid-template-columns: 200px 1fr auto;
+      gap: $space-md;
+      align-items: center;
+      padding: $space-lg 0;
+      border-bottom: 1px solid $border;
+      opacity: 0.6;
+      transition: opacity 0.6s $ease-out;
+
+      &:hover { opacity: 1; }
+
+      @media (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr;
+        gap: $space-sm;
+      }
+    }
+
+    &__event-label {
+      font-family: $font-mono;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $alignment-gold;
+    }
+
+    &__event-image {
+      aspect-ratio: 16/9;
+      background: $deep-navy;
+      border: 1px solid $border;
+    }
+
+    &__event-date {
+      font-family: $font-mono;
+      font-size: 11px;
+      color: $text-muted;
+      letter-spacing: 0.05em;
+    }
+  }
+}
+
+// ─── SECTION 10: LONG NIGHT ─────────────────────────────
+.section--long-night {
+  background: linear-gradient(180deg, $bg-primary 0%, #061020 50%, $bg-primary 100%);
+
+  .long-night {
+    &__journal {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    &__entry {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: $space-md;
+      padding: $space-lg 0;
+      border-bottom: 1px solid $border;
+      opacity: 0.7;
+      transition: opacity 0.4s $ease-out;
+
+      &:hover { opacity: 1; }
+    }
+
+    &__time {
+      font-family: $font-mono;
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: $text-primary;
+      letter-spacing: 0.05em;
+    }
+
+    &__entry p {
+      font-family: $font-body;
+      font-size: 1rem;
+      font-weight: 300;
+      color: $text-secondary;
+      line-height: 1.8;
+    }
+  }
+}
+
+// ─── SECTION 11: RESTRICTED ─────────────────────────────
+.section--restricted {
+  background: $bg-primary;
+
+  .restricted {
+    &__files {
+      display: flex;
+      flex-direction: column;
+      gap: $space-lg;
+    }
+
+    &__file {
+      padding: $space-lg;
+      border: 1px solid $border;
+      background: rgba($deep-navy, 0.3);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        background: rgba($observation-amber, 0.5);
+      }
+    }
+
+    &__file-classification {
+      font-family: $font-mono;
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: $observation-amber;
+      display: block;
+      margin-bottom: $space-md;
+    }
+
+    &__file-content {
+      display: flex;
+      flex-direction: column;
+      gap: $space-xs;
+      margin-bottom: $space-md;
+    }
+
+    &__redacted {
+      font-family: $font-mono;
+      font-size: 14px;
+      color: rgba($starlight-silver, 0.2);
+      letter-spacing: 0.1em;
+      user-select: none;
+    }
+
+    &__file-status {
+      font-family: $font-mono;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba($observation-amber, 0.6);
+    }
+  }
+}
+
+// ─── SECTION 12: PHENOMENON ─────────────────────────────
+.section--phenomenon {
+  background: radial-gradient(ellipse at 50% 50%, $midnight-blue 0%, $bg-primary 60%);
+
+  .phenomenon {
+    &__revelation {
+      display: flex;
+      flex-direction: column;
+      gap: $space-xl;
+      padding: $space-xl 0;
+    }
+
+    &__finding,
+    &__observation,
+    &__conclusion {
+      max-width: 700px;
+    }
+
+    &__finding-label,
+    &__observation-label,
+    &__conclusion-label {
+      font-family: $font-mono;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $text-muted;
+      display: block;
+      margin-bottom: $space-sm;
+    }
+
+    &__finding-text,
+    &__observation-text {
+      font-family: $font-display;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 300;
+      color: $text-secondary;
+      line-height: 1.4;
+    }
+
+    &__conclusion-text {
+      font-family: $font-display;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 300;
+      color: $text-primary;
+      line-height: 1.4;
+    }
+
+    &__subject {
+      padding: $space-xl 0;
+      text-align: center;
+    }
+
+    &__subject-name {
+      font-family: $font-display;
+      font-size: clamp(3rem, 8vw, 8rem);
+      font-weight: 300;
+      color: $moon-white;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+  }
+}
+
+// ─── SECTION 13: FINAL OBSERVATION ──────────────────────
+.section--final {
+  background: radial-gradient(ellipse at 50% 50%, $midnight-blue 0%, $bg-primary 50%);
+
+  .final {
+    &__sequence {
+      display: flex;
+      flex-direction: column;
+      gap: $space-lg;
+      margin-bottom: $space-xl;
+    }
+
+    &__align-item {
+      font-family: $font-display;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 300;
+      color: $text-secondary;
+      opacity: 0.5;
+      transition: all 0.6s $ease-out;
+
+      &.aligned {
+        opacity: 1;
+        color: $text-primary;
+        transform: translateX(0);
+      }
+
+      span {
+        display: block;
+      }
+    }
+
+    &__result {
+      text-align: center;
+      padding: $space-xl 0;
+    }
+
+    &__result p {
+      font-family: $font-body;
+      font-size: 1rem;
+      color: $text-secondary;
+      margin-bottom: $space-md;
+    }
+
+    &__conclusion {
+      font-family: $font-display;
+      font-size: clamp(3rem, 10vw, 10rem);
+      font-weight: 300;
+      color: $moon-white;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+  }
+}
+
+// ─── SECTION 14: CONCLUSION ─────────────────────────────
+.section--conclusion {
+  background: $bg-primary;
+
+  .conclusion {
+    &__assessment {
+      max-width: 500px;
+    }
+
+    &__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: $space-md 0;
+      border-bottom: 1px solid $border;
+    }
+
+    &__label {
+      font-family: $font-mono;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: $text-muted;
+    }
+
+    &__value {
+      font-family: $font-display;
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: $text-primary;
+    }
+  }
+}
+
+// ─── SECTION 15: CONTINUES ──────────────────────────────
+.section--continues {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 50%, $midnight-blue 0%, $bg-primary 70%);
+
+  .section__content {
+    text-align: center;
+    max-width: 600px;
+  }
+
+  .continues {
+    &__status {
+      margin-bottom: $space-xl;
+      padding: $space-lg 0;
+      border-top: 1px solid $border;
+      border-bottom: 1px solid $border;
+    }
+
+    &__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: $space-sm 0;
+
+      @media (max-width: $breakpoint-md) {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+    }
+
+    &__label {
+      font-family: $font-mono;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: $text-muted;
+    }
+
+    &__value {
+      font-family: $font-display;
+      font-size: 1.25rem;
+      font-weight: 300;
+      color: $text-primary;
+
+      &--active {
+        color: $alignment-gold;
+      }
+    }
+
+    &__message {
+      font-family: $font-display;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 300;
+      color: $text-secondary;
+      line-height: 2;
+    }
+  }
+}
+
+// ─── SPLIT LINE ANIMATION ───────────────────────────────
+.split-line {
+  display: block;
+  overflow: hidden;
+}
+
+.split-line__inner {
+  display: block;
+  transform: translateY(110%);
+}
+
+// ─── REVEAL ANIMATIONS ──────────────────────────────────
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity $duration-reveal $ease-out, transform $duration-reveal $ease-out;
+
+  &.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal--delay-1 { transition-delay: 0.1s; }
+.reveal--delay-2 { transition-delay: 0.2s; }
+.reveal--delay-3 { transition-delay: 0.3s; }
+.reveal--delay-4 { transition-delay: 0.4s; }
+.reveal--delay-5 { transition-delay: 0.5s; }
+
+// ─── NOISE OVERLAY ──────────────────────────────────────
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+// ─── FOOTER ─────────────────────────────────────────────
+.footer {
+  position: relative;
+  width: 100%;
+  background: $bg-primary;
+  border-top: 1px solid $border;
+  z-index: 10;
+
+  &__inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: $space-lg $grid-margin;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $space-sm;
+
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      text-align: center;
+      gap: $space-xs;
+    }
+  }
+
+  &__studio {
+    font-family: $font-mono;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $text-muted;
+  }
+
+  &__credit {
+    font-family: $font-mono;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: $text-muted;
+  }
+
+  &__love {
+    font-family: $font-mono;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: $text-muted;
+  }
+
+  &__heart {
+    color: $observation-amber;
+    font-size: 12px;
+    display: inline-block;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.15); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+}

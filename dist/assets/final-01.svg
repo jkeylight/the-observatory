@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <defs>
+    <radialGradient id="finalsky" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#081120"/>
+      <stop offset="100%" stop-color="#040507"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#finalsky)"/>
+  <!-- Dense star field -->
+  <circle cx="80" cy="60" r="0.8" fill="#F2EFE8" opacity="0.6"/>
+  <circle cx="160" cy="90" r="1.1" fill="#BFC5CF" opacity="0.7"/>
+  <circle cx="240" cy="40" r="0.6" fill="#F2EFE8" opacity="0.5"/>
+  <circle cx="320" cy="80" r="1" fill="#BFC5CF" opacity="0.8"/>
+  <circle cx="400" cy="50" r="0.7" fill="#F2EFE8" opacity="0.6"/>
+  <circle cx="480" cy="70" r="0.9" fill="#BFC5CF" opacity="0.7"/>
+  <circle cx="560" cy="30" r="1.2" fill="#F2EFE8" opacity="0.9"/>
+  <circle cx="640" cy="60" r="0.8" fill="#BFC5CF" opacity="0.6"/>
+  <circle cx="720" cy="85" r="1" fill="#F2EFE8" opacity="0.7"/>
+  <circle cx="800" cy="45" r="0.6" fill="#BFC5CF" opacity="0.5"/>
+  <circle cx="880" cy="75" r="0.9" fill="#F2EFE8" opacity="0.8"/>
+  <circle cx="960" cy="55" r="1.1" fill="#BFC5CF" opacity="0.7"/>
+  <circle cx="1040" cy="80" r="0.7" fill="#F2EFE8" opacity="0.6"/>
+  <circle cx="1120" cy="35" r="1" fill="#BFC5CF" opacity="0.8"/>
+  <!-- Subject standing beneath stars -->
+  <ellipse cx="600" cy="600" rx="60" ry="120" fill="#0F1A2E" opacity="0.3"/>
+  <circle cx="600" cy="500" r="30" fill="#0F1A2E" opacity="0.4"/>
+  <!-- Light from above -->
+  <polygon points="580,0 620,0 640,500 560,500" fill="#BFC5CF" opacity="0.02"/>
+  <!-- Final glow -->
+  <circle cx="600" cy="300" r="3" fill="#F2EFE8" opacity="0.9"/>
+  <circle cx="600" cy="300" r="10" fill="#F2EFE8" opacity="0.2"/>
+  <circle cx="600" cy="300" r="25" fill="#F2EFE8" opacity="0.05"/>
+  <!-- Observatory silhouette at bottom -->
+  <polygon points="450,750 500,700 700,700 750,750 750,800 450,800" fill="#040507" opacity="0.5"/>
+  <path d="M550,700 Q600,670 650,700" fill="#081120" opacity="0.4"/>
+  <!-- Label -->
+  <text x="600" y="780" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#BFC5CF" opacity="0.4" letter-spacing="0.2em">FINAL OBSERVATION — AURORA VELASQUEZ</text>
+</svg>
